@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    
+    <style>
+        body {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid #4facfe;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background-color: #4facfe;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00c6ff;
+        }
+
+        .weather-box {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .weather-box img {
+            margin-top: 10px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌤️ Weather App</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Enter city name" required>
+            <br>
+            <button type="submit">Get Weather</button>
+        </form>
+
+        {% if weather_data %}
+            {% if weather_data.error %}
+                <div class="error">{{ weather_data.error }}</div>
+            {% else %}
+                <div class="weather-box">
+                    <h2>{{ weather_data.location.name }}, {{ weather_data.location.country }}</h2>
+                    <p><strong>Temperature:</strong> {{ weather_data.current.temp_c }}°C</p>
+                    <p><strong>Condition:</strong> {{ weather_data.current.condition.text }}</p>
+                    <img src="{{ weather_data.current.condition.icon }}" alt="weather icon">
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
